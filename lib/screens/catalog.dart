@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider_example/models/cart.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_example/models/cart_model.dart';
 import 'package:provider_example/models/catalog.dart';
 
 class MyCatalog extends StatelessWidget {
@@ -11,7 +11,7 @@ class MyCatalog extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _MyAppBar(),
+          const _MyAppBar(),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) => _MyListItem(index)),
@@ -32,6 +32,7 @@ class _AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// context.select<T，R>(R cb(T value))，允许 widget 只监听 T 上的一部分内容的改变。
     var isInCart = context.select<CartModel, bool>(
       (cart) => cart.items.contains(item),
     );
@@ -39,7 +40,9 @@ class _AddButton extends StatelessWidget {
       onPressed: isInCart
           ? null
           : () {
+              /// context.read<T>()，直接返回 T，不会监听改变。
               var cart = context.read<CartModel>();
+              /// 调用 add 方法
               cart.add(item);
             },
       style: ButtonStyle(
@@ -83,6 +86,7 @@ class _MyListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// context.select<T，R>(R cb(T value))，允许 widget 只监听 T 上的一部分内容的改变。
     var item = context.select<CatalogModel, Item>(
       (catalog) => catalog.getByPosition(index),
     );
