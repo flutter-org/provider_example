@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// import 'package:provider/provider.dart';
 import 'package:provider_example/models/cart.dart';
 
 class MyCart extends StatelessWidget {
@@ -25,7 +26,7 @@ class MyCart extends StatelessWidget {
                 child: _CartList(),
               ),
             ),
-            Divider(height: 4,color: Colors.black),
+            Divider(height: 4, color: Colors.black),
             _CartTotal()
           ],
         ),
@@ -40,6 +41,8 @@ class _CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var itemNameStyle = Theme.of(context).textTheme.headline6;
+
+    /// context.watch<T>()，widget 能够监听到 T 类型的 provider 发生的改变。
     var cart = context.watch<CartModel>();
     return ListView.builder(
       itemCount: cart.items.length,
@@ -48,6 +51,7 @@ class _CartList extends StatelessWidget {
         trailing: IconButton(
           icon: const Icon(Icons.remove_circle_outline),
           onPressed: () {
+            /// 调用 remove 方法
             cart.remove(cart.items[index]);
           },
         ),
@@ -72,7 +76,13 @@ class _CartTotal extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Consumer<CartModel>(builder: (context, cart, child) => Text('\$${cart.totalPrice}', style: hugeStyle)),
+            /// 使用 Consumer 方式
+            Consumer<CartModel>(
+              builder: (context, cart, child) => Text(
+                '\$${cart.totalPrice}',
+                style: hugeStyle,
+              ),
+            ),
             const SizedBox(width: 24),
             TextButton(
               onPressed: () {
